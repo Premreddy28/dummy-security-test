@@ -1,0 +1,20 @@
+name: Manual Semgrep Scan
+
+on:
+  workflow_dispatch:  # This adds a "Run workflow" button
+
+jobs:
+  semgrep:
+    name: Run Security Scan
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep
+        run: semgrep scan --config auto --json --output results.json
+      - name: Upload Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-results
+          path: results.json
